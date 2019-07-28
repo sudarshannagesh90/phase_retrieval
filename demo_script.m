@@ -1,6 +1,6 @@
 %% Script for using phase-retrieval algorithms.
 clear; clc; close all;
-addpath('Algorithms/');
+addpath(genpath('Algorithms/'));
 
 %% Problem parameters
 n = 16^2;
@@ -11,12 +11,19 @@ meas_type = 3;                        % 1: 0, 1 measurements
                                       % 3: Gaussian measurements
                                       
 %% Algorithm parameters
-alg_type = 3;                         % 1: Gerchberg-Saxton algorithm
+alg_type = 1;                         % 1: Gerchberg-Saxton algorithm
                                       % 2: WF
                                       % 3: PhaseLift
+                                      % 4: PhaseCut
+                                      % 5: PhaseMax
+                                      % 6: prGAMP
+                                      % 7: prVBEM
+                                      % 8: prVAMP
+                                      % 9: prSAMP
 
 %% Make measurements
 x_o = randn(n, 1) + 1j * randn(n, 1);
+xvar = var(x_o);
 switch meas_type
     case 1
         A = round(rand(p, n));
@@ -41,6 +48,47 @@ switch alg_type
     case 3
         n_iters = 200;
         x_recovered = PhaseLift(y, A, n_iters);
+    case 4
+        n_iters = 200;
+        x_recovered = PhaseCut(y, A, n_iters);
+    case 5
+        n_iters = 100;
+        x_recovered = PhaseMax(y, A, n_iters);
+    case 6
+        n_iters = 50;
+        x_init = sqrt(xvar) * (1 / sqrt(2) * randn(n, 1) + 1j * 1 / sqrt(2) * randn(n, 1));
+        opts = {};
+        opts.priorPrmts = [1, 0, var(x_init)];
+        Beta = .1;
+        x_recovered = myprGAMP(Beta, sigma_w^2, x_init, [], y, n_iters, n, 1, 'gb', 1, 'phaseless', opts.priorPrmts, A);
+    case 7
+        n_iters = 50;
+        x_recovered = prVBEM_withnoise(y, A, sigma_w, n_iters);
+    case 8
+        n_iters = 50;
+        spars = 1;
+        xvar_hat = 4 * xvar;
+        x_init = sqrt(xvar) * (1 / sqrt(2)) * randn(n, 1) + 1j * (1 / sqrt(2)) * randn(n, 1);
+        [U,S,V] = svd(A, 'econ');
+        d = diag(S).^2;
+        EstimIn = SparseScaEstim(CAwgnEstimIn(0,xvar_hat),spars);
+        wvar_hat = sigma_w^2;
+        EstimOut=ncCAwgnEstimOut(y,wvar_hat*ones(p,1),0,0);
+        vampOpt = VampGlmOpt;
+        vampOpt.nitMax = n_iters;
+        vampOpt.tol = 0;%Always run to nitMax
+        vampOpt.damp = .8;
+        vampOpt.learnGam1 = false;
+        vampOpt.verbose = false;
+        vampOpt.U = U;
+        vampOpt.V = V;
+        vampOpt.d = d;
+        vampOpt.p1init = wvar_hat*(1/sqrt(2)*randn(p,1)+1i*1/sqrt(2)*randn(p,1));
+        [x_recovered,~] = myVampGlmEst(EstimIn,EstimOut,A,vampOpt,x_init);
+    case 9
+        n_iters = 50;
+        x_init = sqrt(xvar) * (1 / sqrt(2)) * randn(n, 1) + 1j * (1 / sqrt(2)) * randn(n, 1);
+        x_recovered = prsamp_demo_newchannel(A, y, x_init, sigma_w^2*ones(p, 1), 0.5, 0.5, 1e5, n_iters);
 end
 
 %% Unwrap phase of the solution
