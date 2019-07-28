@@ -1,0 +1,23 @@
+This Octave/Matlab package contains an implementation of the algorithm described in "Phase Recovery, MaxCut and Complex Semidefinite programming" (http://arxiv.org/abs/1206.0102).
+
+Its goal is, given a matrix A, to reconstruct an unknown signal f0 from the modulus of A*f0, with methods of semidefinite programming.
+
+The file 'example.m' contains all the necessary instructions for performing reconstruction and displaying the results.
+Several ways of choosing f0 and A are implemented. They may be selected by changing the values of the strings at the beginning of 'example.m'. The amount of a priori information about the signal A (if it is real or symmetric or if some phases are known) may be controlled by changing the fields of the 'a_priori' structure.
+
+This code is by far not perfect and contains probably many bugs and various problems. If you want to report them or if you have comments and suggestions, please write me at the following address: waldspur@clipper.ens.fr .
+
+Date : 06/18/12
+
+-----------------------------------
+
+Ce dossier contient une implémentation pour Octave/Matlab de l'algorithme décrit dans l'article "Phase Recovery, MaxCut and Complex Semidefinite programming" (disponible à l'adresse http://arxiv.org/abs/1206.0102).
+
+Son but est, une matrice A étant donnée, de reconstruire un signal f0 inconnu à partir des modules de A*f0, par des méthodes de programmation semi-définie.
+
+Le fichier 'example.m' contient toutes les instructions nécessaires pour accomplir la reconstruction et affichier les résultats.
+Différentes manières de choisir f0 et A sont implémentées. Elles peuvent être sélectionnées en changeant les valeurs des chaînes de caractère au début d''example.m'. Il est possible de contrôler la quantité d'information connue a priori sur le signal A (s'il est réel ou symétrique, si certaines phases sont connues) en changeant les champs de la structure nommée 'a_priori'.
+
+Ce code est loin d'être parfait et contient certainement beaucoup d'erreurs. Si vous voulez me les signaler ou si vous avez des commentaires et suggestions à son sujet, vous êtes les bienvenu-e-s ; vous pouvez m'écrire à l'adresse suivante : waldspur@clipper.ens.fr .
+
+Version du 18 juin 2012

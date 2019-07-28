@@ -11,8 +11,9 @@ meas_type = 3;                        % 1: 0, 1 measurements
                                       % 3: Gaussian measurements
                                       
 %% Algorithm parameters
-alg_type = 2;                         % 1: Gerchberg-Saxton algorithm
+alg_type = 3;                         % 1: Gerchberg-Saxton algorithm
                                       % 2: WF
+                                      % 3: PhaseLift
 
 %% Make measurements
 x_o = randn(n, 1) + 1j * randn(n, 1);
@@ -37,6 +38,9 @@ switch alg_type
         n_iters = 2500;
         tau0 = 330;      % Schedule for step size
         x_recovered = WF(y, A, n_iters, tau0);
+    case 3
+        n_iters = 200;
+        x_recovered = PhaseLift(y, A, n_iters);
 end
 
 %% Unwrap phase of the solution

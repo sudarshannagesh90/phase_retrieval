@@ -1,0 +1,9 @@
+This folder contains third party software used by 
+SparsePR. In particular, it contains an installation 
+of TFOCS. The license terms under which TFOCS is 
+distributed can found in the file TFOCS/LICENSE
+
+The initialization routine for TFOCS at 
+	TFOCS/private/tfocs_initialize.m      
+has been replaced by a modified version written by 
+Mahdi Soltanolkotabi (http://web.stanford.edu/~mahdisol/PRcode.html).
