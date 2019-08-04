@@ -1,7 +1,7 @@
 # Phase retrieval algorithms 
 
 The script demo_script.m contains the necessary MATLAB code
-needed for using the phase-retrieval algorithms:
+for using the phase-retrieval algorithms:
 
 1. Gerchberg-Saxton algorithm: [Gerchberg and Saxton, 1972]
 2. Wirtinger-Flow: [Candes et al., 2014]
